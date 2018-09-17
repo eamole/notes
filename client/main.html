@@ -1,0 +1,171 @@
+<head>
+  <title>RM Plus</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body>
+
+  <div class="container">
+
+    {{> mainNav}}
+
+    <!--<h3>Welcome to RM Plus</h3>-->
+    {{> bookingsView }}
+
+    {{> Template.dynamic template=currentPage }}
+  </div>
+
+
+
+  <script>
+      $(document).ready(function(){
+          $('.modal').modal();
+
+          $('#bookings').click(function(){
+            debugger
+            Template.bookingsView.isVisible.set(true)
+          })
+      });
+  </script>
+
+</body>
+
+<template name="mainNav">
+  <nav class="blue">
+    <div class="container">
+      <div class="nav-wrapper">
+        <a href="#" class="brand-logo">RM+</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+
+          <!-- only visible to logged in users-->
+          {{#if currentUser}}
+            <li class="nav-item">
+              <a id="bookings" class="waves-effect waves-light btn" href="#bookings" data-template="bookingsView">Bookings</a>
+            </li>
+          {{/if}}
+
+          <!-- login -->
+          <li class="nav-item">
+            {{> loginButtons}}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+</template>
+
+<template name="bookingsView">
+  Here are the bookings
+  {{#if isVisible }}
+    Visible
+    {{> bookingsList }}
+    <!-- a hidden modal -->
+    {{> bookingAdd }}
+  {{/if}}
+
+</template>
+
+
+<template name="bookingsNav">
+
+  <nav class="blue">
+    <div class="container">
+      <div class="nav-wrapper">
+        <a href="#" class="brand-logo">Bookings</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+
+          <!-- only visible to logged in users-->
+          {{#if currentUser}}
+            <li class="nav-item">
+              <a class="waves-effect waves-light btn modal-trigger" href="#addBooking">Add</a>
+            </li>
+          {{/if}}
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+</template>
+
+<!-- display all notes - sorted by date ASC -->
+<template name="bookingsList">
+
+  <!-- the menu -->
+  {{> bookingsNav }}
+
+  <!-- only visble to logged in user -->
+  {{#if currentUser }}
+    <ul class="collection">
+      {{#each bookings }}
+        {{> bookingRow }}
+      {{/each}}
+    </ul>
+  {{else}}
+    Please login to see bookings
+  {{/if}}
+
+
+</template>
+
+<template name="bookingRow">
+  <li class="collection-item">
+    {{text}}
+    <!-- add in inverse order - secondary-content floats to right as encountered-->
+    <a href="#delete" class="delete secondary-content"><i class="material-icons">close</i></a>
+    <a href="#copy" class="copy secondary-content"><i class="material-icons">content_copy</i></a>
+    <a href="#edit" class="edit secondary-content"><i class="material-icons">edit</i></a>
+    <a href="#view" class="view secondary-content"><i class="material-icons">visibility</i></a>
+
+    <span>
+      <small><strong>Created by {{ userName userId }}</strong></small>
+    </span>
+
+  </li>
+</template>
+
+
+<template name='bookingAdd'>
+  <!-- Modal Structure -->
+  <div id="bookingAdd" class="modal">
+    <div class="modal-content">
+      <h4>Add Booking</h4>
+      <p>Enter the booking details below</p>
+      <form class="add-form">
+        <input type="text" name="text" class="input" placeholder="Add some text....." />
+      </form>
+    </div>
+    <div class="modal-footer">
+      <a href="#" class="modal-close waves-effect waves-green btn-flat">Created by {{ userName currentUser._id }}</a>
+    </div>
+  </div>
+</template>
+
+<template name="bookingView">
+
+  {{> bookingTabs }}
+
+</template>
+
+<template name="bookingsTabs">
+  <div class="row">
+    <div class="col s12">
+      <ul class="tabs">
+        <li class="tab col s3"><a class="active" href="#tab1">Summary</a></li>
+        <li class="tab col s3"><a href="#tab">Tab 2</a></li>
+        <li class="tab col s3 disabled"><a href="#tab3">Disabled Tab 3</a></li>
+        <li class="tab col s3"><a href="#tab4">Tab 4</a></li>
+      </ul>
+    </div>
+    <div id="tab1" class="col s12">{{> bookingSummary }} </div>
+    <div id="tab2" class="col s12">Tab 2</div>
+    <div id="tab3" class="col s12">Tab 3</div>
+    <div id="tab4" class="col s12">Tab 4</div>
+  </div>
+</template>
+
+<template name="bookingSummary">
+
+</template>
+
